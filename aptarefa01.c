@@ -8,7 +8,7 @@
 
 typedef struct TregCovidES {
   char dataDiagnostico[14];
-  char classificacao[23];
+  char classificacao[13];
   char municipio[30];
   char bairro[30];
   char sexo[1];
@@ -18,48 +18,104 @@ typedef struct TregCovidES {
 // global variables
 
 typedef struct Classificacao{
-  int nBrancos;
-  int nAmarelos;
-  int nPretos;
-  int nIndigenas;
-  int nPardos;
-  int nIgnorados;
+  double nBrancos;
+  double nAmarelos;
+  double nPretos;
+  double nIndigenas;
+  double nPardos;
+  double nIgnorados;
+  double nTotal;
 } classificacao ;
 
 // ----------------------------
 
-classificacao confirmados, descartados, suspeitos;
-
-confirmados = {
-  .nBrancos = 0,
-  .nAmarelos = 0,
-  .nPretos = 0,
-  .nIndigenas = 0,
-  .nPardos = 0,
-  .nIgnorados = 0
+classificacao confirmados = {
+  .nBrancos = 0.0,
+  .nAmarelos = 0.0,
+  .nPretos = 0.0,
+  .nIndigenas = 0.0,
+  .nPardos = 0.0,
+  .nIgnorados = 0.0,
+  .nTotal = 0.0
 };
 
-descartados = {
-  .nBrancos = 0,
-  .nAmarelos = 0,
-  .nPretos = 0,
-  .nIndigenas = 0,
-  .nPardos = 0,
-  .nIgnorados = 0
+classificacao suspeitos = {
+  .nBrancos = 0.0,
+  .nAmarelos = 0.0,
+  .nPretos = 0.0,
+  .nIndigenas = 0.0,
+  .nPardos = 0.0,
+  .nIgnorados = 0.0,
+  .nTotal = 0.0
 };
 
-suspeitos = {
-  .nBrancos = 0,
-  .nAmarelos = 0,
-  .nPretos = 0,
-  .nIndigenas = 0,
-  .nPardos = 0,
-  .nIgnorados = 0
+classificacao descartados = {
+  .nBrancos = 0.0,
+  .nAmarelos = 0.0,
+  .nPretos = 0.0,
+  .nIndigenas = 0.0,
+  .nPardos = 0.0,
+  .nIgnorados = 0.0,
+  .nTotal = 0.0
 };
 
 // ----------------------------
-
 // filtrar as pessoas 
+
+void filterPerson( tregCovidES pessoa ){
+
+  if( strcmp(pessoa.classificacao , "Confirmados") == 0 ){
+    confirmados.nTotal += 1.0;
+
+    if( strcmp(pessoa.racaCor, "Branca\n") == 0 )
+      confirmados.nBrancos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Amarela\n") == 0 )
+      confirmados.nAmarelos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Preta\n") == 0 )
+      confirmados.nPretos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Indigena\n") == 0 )
+      confirmados.nIndigenas += 1.0;
+    else if( strcmp(pessoa.racaCor, "Parda\n") == 0 )
+      confirmados.nPardos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Ignorado\n") == 0 )
+      confirmados.nIgnorados += 1.0;
+
+  } else if( strcmp(pessoa.classificacao , "Descartados") == 0 ){        
+    descartados.nTotal += 1.0;
+
+    if( strcmp(pessoa.racaCor, "Branca\n") == 0 )
+      descartados.nBrancos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Amarela\n") == 0 )
+      descartados.nAmarelos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Preta\n") == 0 )
+      descartados.nPretos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Indigena\n") == 0 )
+      descartados.nIndigenas += 1.0;
+    else if( strcmp(pessoa.racaCor, "Parda\n") == 0 )
+      descartados.nPardos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Ignorado\n") == 0 )
+      descartados.nIgnorados += 1.0;
+
+  }else if( strcmp(pessoa.classificacao , "Suspeito") == 0 ){      
+    suspeitos.nTotal += 1.0;
+
+    if( strcmp(pessoa.racaCor, "Branca\n") == 0 )
+      suspeitos.nBrancos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Amarela\n") == 0 )
+      suspeitos.nAmarelos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Preta\n") == 0 )
+      suspeitos.nPretos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Indigena\n") == 0 )
+      suspeitos.nIndigenas += 1.0;
+    else if( strcmp(pessoa.racaCor, "Parda\n") == 0 )
+      suspeitos.nPardos += 1.0;
+    else if( strcmp(pessoa.racaCor, "Ignorado\n") == 0 )
+      suspeitos.nIgnorados += 1.0;
+  }else{
+    puts("nao entrou em nenhum");
+  }
+
+}
 
 // ----------------------------
 
@@ -77,8 +133,6 @@ int main(){
   while( !feof(csvFile) ){
 
     fgets(buffer, MAXCHAR, csvFile);
-    
-    printf("row %d: %s", line, buffer);
 
     // catch the first data
     splitedData = strtok(buffer, ";");
@@ -93,7 +147,7 @@ int main(){
         continue;
       }
       
-      splitedData = strtok(buffer, ";");
+      splitedData = strtok(NULL, ";");
 
       switch (dataID){
         case 2:
@@ -119,11 +173,36 @@ int main(){
 
     line++;    
   }
+
   fclose(csvFile);
 
-  // daq
+  puts("Classificacao: Confirmados");
+  printf("Amarela: %.2lf %%\n", 100*(confirmados.nAmarelos/confirmados.nTotal));
+  printf("Branca: %.2lf %%\n", 100*(confirmados.nBrancos/confirmados.nTotal));
+  printf("Indigena: %.2lf %%\n", 100*(confirmados.nIndigenas/confirmados.nTotal));
+  printf("Parda: %.2lf %%\n", 100*(confirmados.nPardos/confirmados.nTotal));
+  printf("Preta: %.2lf %%\n", 100*(confirmados.nPretos/confirmados.nTotal));
+  printf("Ignorados: %.2lf %%\n", 100*(confirmados.nIgnorados/confirmados.nTotal));
+  puts("");
+  
+  puts("Classificacao: Descartados");
+  printf("Amarela: %.2lf %%\n", 100*(descartados.nAmarelos/descartados.nTotal));
+  printf("Branca: %.2lf %%\n", 100*(descartados.nBrancos/descartados.nTotal));
+  printf("Indigena: %.2lf %%\n", 100*(descartados.nIndigenas/descartados.nTotal));
+  printf("Parda: %.2lf %%\n", 100*(descartados.nPardos/descartados.nTotal));
+  printf("Preta: %.2lf %%\n", 100*(descartados.nPretos/descartados.nTotal));
+  printf("Ignorados: %.2lf %%\n", 100*(descartados.nIgnorados/descartados.nTotal));
+  puts("");
+  
+  puts("Classificacao: Suspeitos");
+  printf("Amarela: %.2lf %%\n", 100*(suspeitos.nAmarelos/suspeitos.nTotal));
+  printf("Branca: %.2lf %%\n", 100*(suspeitos.nBrancos/suspeitos.nTotal));
+  printf("Indigena: %.2lf %%\n", 100*(suspeitos.nIndigenas/suspeitos.nTotal));
+  printf("Parda: %.2lf %%\n", 100*(suspeitos.nPardos/suspeitos.nTotal));
+  printf("Preta: %.2lf %%\n", 100*(suspeitos.nPretos/suspeitos.nTotal));
+  printf("Ignorados: %.2lf %%\n", 100*(suspeitos.nIgnorados/suspeitos.nTotal));
+  puts("");
 
   return 0;
 }
-
 // ----------------------------
