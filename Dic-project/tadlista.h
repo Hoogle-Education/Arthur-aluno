@@ -8,6 +8,8 @@
 #ifndef TADLISTA_H_
 #define TADLISTA_H_
 
+#define MAXCHAR 100
+
 typedef void *tdado;
 
 typedef struct tno {

@@ -5,7 +5,8 @@ default:
 # make targets ###########################
 
 project: tadlista.o taddic.o main.o
-	
+	gcc tadlista.o taddic.o main.o -o project
+	make clean_objects
 
 make run:
 	cd Debug/
@@ -26,11 +27,11 @@ tadlista.o: tadlista.c tadlista.h
 
 # ###################################3333
 
-clean objects:
+clean_objects:
 	rm -rf *.o *.out
 
 clean:
-	rm -rf *.o *.out test project
+	rm -rf .*o *.out test project
 
 # g++ -c files.cpp -o files.o
 # g++ -c test.cpp -o test.o

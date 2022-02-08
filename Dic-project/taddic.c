@@ -39,12 +39,12 @@ TDicionario criaDicTam(int tamvet){
 int lenDic (TDicionario dic){
     int somaTotal = 0;
 
-    for(int i=0; i < dic->tam_vet_dic;i++)
+    for(int i=0; i < dic->tam_vet_dic ; i++)  
         if(dic->vetdic[i] != NULL)
-            somaTotal= somaTotal + lenLista(dic->vetdic[i]);
+            somaTotal += lenLista(dic->vetdic[i]);
 
     return somaTotal;
-}; //fim de lenDic
+} //fim de lenDic
 
 TLista keys(TDicionario dic){
     TLista lstkeys = criaLista();

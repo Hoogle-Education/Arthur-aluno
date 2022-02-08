@@ -18,29 +18,28 @@ TLista criaLista() {
 }
 
 TLista appendLista(TLista lst, tdado dado) {
-	// criar novo nó
+	// criar novo nï¿½
 	pnoh novono = (tipoNo *)malloc(sizeof(tipoNo));
 
-	// associar dado a nó
+	// associar dado a nï¿½
 	novono->dado = dado;
-	novono->anterior = lst->ultimo; // <== ALTERAÇÃO P/ ENCADEAMENTO DUPLO
+	novono->anterior = lst->ultimo; // <== ALTERAï¿½ï¿½O P/ ENCADEAMENTO DUPLO
 	novono->proximo = NULL;
 
 	// processa lista vazia.
 	if(lst->tamanho == 0){
 		lst->primeiro = novono;
 		lst->ultimo = novono;
-	} // processa lista não vazia.
+	} // processa lista nï¿½o vazia.
 	else {
-		// inserir novo nó na ultima posição da lista
+		// inserir novo nï¿½ na ultima posiï¿½ï¿½o da lista
 		lst->ultimo->proximo = novono;
 
-		// atualizar cabeçalho
+		// atualizar cabeï¿½alho
 		lst->ultimo = novono;
 	}
 
 	lst->tamanho++;
-
 	return lst;
 }
 
@@ -128,14 +127,14 @@ tdado removeLista(TLista lst,int i) {
 
   if((i < 0) || (i > tam) || (tam == 0)) return NULL;
 
-  if(tam == 1) { // remover o primeiro/ultimo de uma lista de 1 só elemento.
+  if(tam == 1) { // remover o primeiro/ultimo de uma lista de 1 sï¿½ elemento.
      pnoh aux = lst->primeiro;
      lst->primeiro = NULL;
      lst->ultimo = NULL;
      aux->anterior = NULL;
      lst->tamanho--;
 
-     // salva o dado e libera memória do nó.
+     // salva o dado e libera memï¿½ria do nï¿½.
      tdado d =aux->dado;
      free(aux);
 
@@ -150,7 +149,7 @@ tdado removeLista(TLista lst,int i) {
 
 	   lst->tamanho--;
 
-	   // salva o dado e libera memória do nó.
+	   // salva o dado e libera memï¿½ria do nï¿½.
 	   tdado d =aux->dado;
 	   free(aux);
 
@@ -160,7 +159,7 @@ tdado removeLista(TLista lst,int i) {
 	   if(i == tam - 1) { // remover o ultimo de uma lista com mais de 1 elemento.
 		 pnoh aux = lst->ultimo;
 
-		 // caminha até o penúltimo
+		 // caminha atï¿½ o penï¿½ltimo
 		 pnoh penultimo = lst->primeiro;
 		 int pos = 0;
 
@@ -174,14 +173,14 @@ tdado removeLista(TLista lst,int i) {
 
 		 lst->tamanho--;
 
-		 // salva o dado e libera memória do nó.
+		 // salva o dado e libera memï¿½ria do nï¿½.
 	     tdado d =aux->dado;
 	     free(aux);
 
 	     return d;
-	   }     // remover o i-ésimo (entre primeiro e último)
+	   }     // remover o i-ï¿½simo (entre primeiro e ï¿½ltimo)
 	   else {// de uma lista com mais de 1 elemento.
-		 // caminha até o nó anterior ao que será removido.
+		 // caminha atï¿½ o nï¿½ anterior ao que serï¿½ removido.
 		 pnoh anterior = lst->primeiro;
 		 int pos = 0;
 
@@ -190,14 +189,14 @@ tdado removeLista(TLista lst,int i) {
 			 pos++;
 		 }
 
-		 // remove o nó da lista.
+		 // remove o nï¿½ da lista.
 		 pnoh aux = anterior->proximo;
      pnoh apos = anterior->proximo;
 		 apos = aux->proximo;
      apos->anterior = anterior;
 		 lst->tamanho--;
 
-		 // salva o dado e libera memória do nó.
+		 // salva o dado e libera memï¿½ria do nï¿½.
 		 tdado d = aux->dado;
 		 free(aux);
 
